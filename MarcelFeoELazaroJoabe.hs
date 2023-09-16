@@ -1,6 +1,17 @@
 import System.Random
 import System.IO
 
+atualizaArquivo::Int -> IO()
+atualizaArquivo qtdTentativas = do
+                recorde <- readFile "highscore.txt"
+                let recordeInt = read recorde
+                if qtdTentativas < recordeInt
+                    then do
+                        writeFile "highscore.txt" (show qtdTentativas)
+                        putStrLn "Voce bateu o recorde!"
+                    else 
+                        putStrLn "Boa tentativa, mas voce nao bateu o recorde"
+                
 jogarNovamente :: IO ()
 jogarNovamente = do
     putStrLn "Você quer jogar novamente? (s ou n)"
@@ -20,6 +31,7 @@ verificaNum numAleatorio qtdTentativas = do
 
     if num == numAleatorio
         then do
+            atualizaArquivo qtdTentativas
             putStrLn $ "Você acertou!\nNúmero correto: " ++ show num ++ "\nTotal de tentativas: " ++ show qtdTentativas
             jogarNovamente
         else do
